@@ -14,6 +14,7 @@ import { readWorkspaceContext } from "./workspace-context.js";
 import { searchWorkspaceFiles } from "./file-search.js";
 import { resolveLocalFile } from "./file-service.js";
 import { resolveLocalImage } from "./image-service.js";
+import { readUploadBody, saveUpload, uploadFilename } from "./upload-service.js";
 import { LiveSessionStore } from "./live-session-service.js";
 import {
   createPasswordSession,
@@ -641,6 +642,28 @@ const server = createServer(async (req, res) => {
       }
       res.writeHead(200, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
       res.end(JSON.stringify(toPublicAccountIdentity(await resolveAccountIdentity({ account: null, requiresOpenaiAuth: true }))));
+    }
+    return;
+  }
+  if (url.pathname === "/api/uploads") {
+    if (req.method !== "POST") {
+      res.writeHead(405, { "content-type": "application/json", allow: "POST", "cache-control": "no-store" });
+      res.end(JSON.stringify({ error: "Method not allowed" }));
+      return;
+    }
+    try {
+      const name = uploadFilename(url.searchParams.get("name"));
+      const cwd = resolveBrowsePath(url.searchParams.get("cwd") || defaultCwd, browseRoots, homeDir);
+      if (!isDirectory(cwd)) throw new Error("Project directory unavailable");
+      const bytes = await readUploadBody(req);
+      const attachment = await saveUpload({ cwd, name, bytes, allowedRoots: browseRoots });
+      res.writeHead(201, { "content-type": "application/json", "cache-control": "no-store", "x-content-type-options": "nosniff" });
+      res.end(JSON.stringify(attachment));
+    } catch (error) {
+      req.resume();
+      const status = error?.status || 400;
+      res.writeHead(status, { "content-type": "application/json", "cache-control": "no-store", "x-content-type-options": "nosniff" });
+      res.end(JSON.stringify({ error: error instanceof Error ? error.message : "Upload failed" }));
     }
     return;
   }

@@ -749,3 +749,13 @@ body.sidebar-hidden .sidebar>div{opacity:0}
 .shortcut-row kbd{padding:3px 6px;border:1px solid var(--app-border-default);border-radius:5px;background:var(--app-fog);color:var(--app-text-secondary);font:10px var(--mono)}
 @media(max-width:720px){.settings-dialog{inset:46px 0 0;height:calc(100dvh - 46px)}.settings-card{grid-template-columns:minmax(176px,42vw) minmax(0,1fr)}.settings-nav{padding-inline:8px}.settings-page{padding:28px 20px 36px}}
 @media(max-width:480px){.settings-card{display:block}.settings-nav,.settings-content{height:100%}.settings-nav{border-right:0;padding-inline:12px}.settings-nav-toolbar-spacer{height:10px;flex-basis:10px}.settings-content{display:none}.settings-dialog[data-mobile-page="true"] .settings-nav{display:none}.settings-dialog[data-mobile-page="true"] .settings-content{display:block}.settings-dialog[data-mobile-page="true"] .settings-mobile-back{display:inline-grid!important}.settings-page{width:100%;padding:24px 20px 36px}.settings-page-heading{margin-bottom:22px}.settings-row:not(.settings-toggle-row)>span:last-child{max-width:52%}}
+
+/* Browser file attachments. */
+.attachment-tray{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px 0;max-height:150px;overflow:auto}
+.attachment-tray[hidden]{display:none}
+.attachment-chip{display:flex;align-items:center;gap:7px;min-width:0;max-width:100%;padding:5px 8px;border:1px solid var(--app-border-default);border-radius:8px;color:var(--app-text);background:var(--app-input);font-size:12px}
+.attachment-chip>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+.attachment-status{color:var(--app-text-secondary);font-size:11px}
+.attachment-chip[data-status=error] .attachment-status{color:var(--danger)}
+.attachment-chip button{padding:2px 4px;border-radius:4px;flex-shrink:0}
+.attachment-chip button:focus-visible{outline:2px solid currentColor}

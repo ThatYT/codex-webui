@@ -78,6 +78,30 @@ http://127.0.0.1:8899
 
 The default bind address is localhost. Use the folder button in the composer or sidebar to select the project Codex should work in.
 
+### Browser file uploads (this fork)
+
+Use **+ → Attach files** in the chat composer to select files from your browser's
+computer. You can attach up to 10 files per message, each up to 20 MiB. Uploads
+show progress, can be removed before sending, and offer Retry after a failed
+transfer. Sending is blocked until every attachment is ready or removed.
+
+Files are saved on the server inside the selected project's
+`.codex-webui-uploads/upload-<unique-id>/` directory. Duplicate filenames do not
+overwrite each other. PNG, JPEG, and WebP images are passed to Codex as local
+image inputs; other files are referenced by their server paths so Codex can
+read them with its available tools and permissions. Attaching a PDF, document,
+or archive does not add a parser for that format.
+
+You can send attachments with or without a text prompt. Removing a chip detaches
+it from the draft; it does not delete the server copy. Uploaded files persist
+so saved conversations can reference them after refresh or restart. Unsent
+attachment drafts do not survive a browser refresh. Add `.codex-webui-uploads/`
+to your project's Git ignore rules if needed. Manually remove old upload
+folders only when their conversations no longer need them.
+
+Uploads use the same authenticated, same-origin HTTP connection as the chat.
+SSH/FRP forwarding works without a separate upload port or public listener.
+
 ### LAN password login
 
 To listen on your LAN, start the server without an authentication variable:
